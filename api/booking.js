@@ -1,24 +1,21 @@
 export default async function handler(req, res) {
   const targetUrl = req.query.url;
-  
+
   if (!targetUrl) {
     return res.status(400).json({ success: false, message: 'Missing Google Script URL' });
   }
 
   try {
     const googleRes = await fetch(targetUrl, {
-      method: 'POST',
+      method: 'GET', // изменили метод на GET, так как не отправляем тело запроса
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(req.body),
     });
 
     const data = await googleRes.json();
-    
     console.log("Ответ от Google Apps Script:", data); // Логирование ответа
 
-    // Устанавливаем CORS-заголовки
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
